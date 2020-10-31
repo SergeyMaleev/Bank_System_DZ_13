@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="BankSystem.View.EntryWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:BankSystem.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Entry"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    MinWidth="800"
+    MinHeight="450"
+    mc:Ignorable="d"
+    DataContext="{Binding Source={StaticResource vmLocator}, Path = EntryWindowViewModel}">
+
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image Source="/Resources/Tip-Jar-1.png"  Width="70"/>
+            <Button
+                Margin="20"
+                Padding="20"
+                Content="Войти как клиент" 
+                Command="{Binding LoginСlientCommand}"/>
+            <Button
+                Margin="20"
+                Padding="20"
+                Content="Войти как сотрудник"
+                Command="{Binding LoginStaffCommand}"/>
+        </StackPanel>
+    </Grid>
+</Page>

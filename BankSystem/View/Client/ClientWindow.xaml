@@ -1,0 +1,150 @@
+﻿<Page
+    x:Class="BankSystem.View.Client.ClientWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:BankSystem.View.Client"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ClientWindow"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{Binding Source={StaticResource vmLocator}, Path=ClientWindowViewModel}"
+    mc:Ignorable="d"   
+    >
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="bvc" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Margin="106,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <TextBlock FontSize="24" Text="Мы подберем для Вас самое выгодное предложение" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="24"
+                Text="по кредиту" />
+            <TextBlock
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                FontSize="12"
+                Text="(пожалуйста заполните форму и нажмите рассчитать)" />
+        </StackPanel>
+        <StackPanel
+            Margin="0,100,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top" 
+            Grid.Column="0"
+            Grid.Row="0">
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="Вы являетесь: " />
+                <ComboBox SelectedIndex="{Binding СlientsСhoice}">
+                    <ComboBoxItem IsSelected="True">
+                        <TextBlock>Физическим лицом</TextBlock>
+                    </ComboBoxItem>
+                    <TextBlock>Юридическим лицом</TextBlock>
+                </ComboBox>
+            </DockPanel>
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="Название организации: " />
+                <TextBox
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    IsEnabled="{Binding Organization}"
+                    Text="{Binding NameOrganization}" />
+            </DockPanel>
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="Введите имя: " />
+                <TextBox
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    Text="{Binding FirstName}" />
+            </DockPanel>
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="Введите фамилию: " />
+                <TextBox
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    Text="{Binding LastName}" />
+            </DockPanel>
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="Введите возраст: " />
+                <TextBox
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    Text="{Binding Age}" />
+            </DockPanel>
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="доход (в месяц): " />
+                <TextBox
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    Text="{Binding Profit}" />
+            </DockPanel>
+            <DockPanel Margin="3">
+                <TextBlock Padding="3" Text="Контактный телефон: " />
+                <TextBox
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    Text="{Binding Telephone}" />
+            </DockPanel>
+
+            <DockPanel Margin="3">
+                <Button
+                    Width="80"
+                    HorizontalAlignment="Right"
+                    Background="LightBlue"
+                    Content="Расчитать" 
+                    Command="{Binding ResultCommand}"/>
+            </DockPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Visibility ="{Binding Result, Converter={StaticResource bvc}}" HorizontalAlignment ="Center"  Grid.Column="1" Margin="5,150,0,0">
+            
+            <TextBlock Text ="Для Вас специальное предложение:" FontSize="22" FontStyle="Italic" Foreground="Green"/>
+            <StackPanel Orientation ="Horizontal">
+                <TextBlock Text ="Одобренная сумма (рублей): "/>
+                <TextBlock Text ="{Binding MaxLimit}"/>
+            </StackPanel>
+            <StackPanel Orientation ="Horizontal">
+                <TextBlock Text ="Ставка % годовых: "/>
+                <TextBlock Text ="{Binding CreditRate}"/>
+            </StackPanel>
+            <StackPanel Orientation ="Horizontal">
+                <TextBlock Text ="На срок (месяцев): "/>
+                <TextBlock Text ="{Binding Period}"/>
+            </StackPanel>
+            <StackPanel Orientation ="Horizontal">
+                <TextBlock Text ="Ежемесячный плятеж (рублей): "/>
+                <TextBlock Text ="{Binding MonthlyFee}"/>
+            </StackPanel>
+            <StackPanel Orientation ="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Расчитать индивидуально" Margin="5" Background="BlueViolet" Foreground ="White" Command="{Binding IndividualCreditCommand}"/>
+                <Button Content="Взять кредит" Margin="5" Background="Green" Foreground ="White"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row ="1" Grid.ColumnSpan ="2" Background ="LightGray" Margin="10" Visibility ="{Binding Individual, Converter={StaticResource bvc}}">
+            <TextBlock Text="Рассчитайте кредит на индивидуальных условиях" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" Foreground ="BlueViolet"/>
+            <TextBlock HorizontalAlignment="Center">
+                <Run Text="желаемая сумма"/>
+                <Run Text="{Binding IndividualLimit}"/>
+            </TextBlock>
+            <Slider  Minimum="0" Maximum="{Binding MaxLimit}" SelectionStart="{Binding MaxLimit}" Height="30" Width="250" 
+        IsSelectionRangeEnabled="True" Value ="{Binding IndividualLimit}"/>
+        </StackPanel>
+
+
+    </Grid>
+
+
+
+</Page>
