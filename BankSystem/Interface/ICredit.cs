@@ -9,7 +9,7 @@ namespace BankSystem.Interface
 {
 
     /// <summary>
-    /// Интерфейс кредитного продукта
+    /// Интерфейс предлагаемого кредитного продукта
     /// </summary>
     public interface ICredit
     {

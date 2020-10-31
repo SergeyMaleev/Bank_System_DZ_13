@@ -24,7 +24,7 @@ namespace BankSystem.Models.Status
         {
             if (client is Legal) //если клиент юр.лицо
             {
-                CreditRate = (16 / 12) * 0.01; //Месячная процентная ставка 
+                CreditRate = (16.0 / 12) * 0.01; //Месячная процентная ставка 
 
                 MaxLimit = client.Profit * 25;
 
@@ -32,7 +32,7 @@ namespace BankSystem.Models.Status
             }
             else //Клиент физ.лицо
             {
-                CreditRate = (14 / 12) * 0.01; //Месячная процентная ставка
+                CreditRate = (14.0 / 12) * 0.01; //Месячная процентная ставка
 
                 MaxLimit = client.Profit * 13;
 

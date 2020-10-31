@@ -26,7 +26,7 @@ namespace BankSystem
          
             services.AddSingleton<AdminBankWindowViewModel>();
 
-            services.AddSingleton<ClientWindowViewModel>();
+            services.AddTransient<ClientWindowViewModel>(); // Обнавляется при каждом обращении
 
             services.AddSingleton<NavigationService>();
 

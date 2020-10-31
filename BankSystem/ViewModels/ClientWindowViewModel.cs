@@ -1,5 +1,6 @@
 ﻿using BankSystem.Models;
 using BankSystem.Models.Status;
+using BankSystem.View;
 using BankSystem.View.Client;
 using BankSystem.ViewModels.Base;
 using DevExpress.Mvvm;
@@ -48,10 +49,10 @@ namespace BankSystem.ViewModels
         /// <summary>
         /// Кредитный рейтинг
         /// </summary>
-        protected int CreditRating { get; set; }
+        private int CreditRating { get; set; }
 
 
-        private string _telephone = "+7 (999) 999-99-99";
+        private string _telephone = "+7 (###) ###-##-##";
 
         /// <summary>
         /// Контактный телефон
@@ -75,7 +76,7 @@ namespace BankSystem.ViewModels
                 if (СlientsСhoice == 0) return false;
                 return true;
             }
-
+           
         }
 
         /// <summary>
@@ -98,17 +99,39 @@ namespace BankSystem.ViewModels
 
 
         //Для отображеия индивидуального кредита
-        public double IndividualLimit { get; set; }
-        public double IndividualMonthlyFee { get; set; }
-        public int IndividualPeriod { get; set; }
-        public double IndividualCreditRate { get; set; }
+        public double IndividualLimit { get; set; } //лимит выбранный пользователем
 
+        public int IndividualPeriod { get; set; }  //период выбранный пользователем
 
+        private double _individualMonthlyFee; //ежемесячный платеж 
 
-
-        public ClientWindowViewModel()
+        public double IndividualMonthlyFee
         {
+            get
+            {              
+                return CreditOffer(CreditRate, IndividualLimit, IndividualPeriod); 
+            }
+            set => Set(ref _individualMonthlyFee, value);
+        }
 
+        
+        private double _iIndividualPereplata; //Переплата по кредиту
+        public double IndividualPereplata
+        {
+            get
+            {
+                return _individualMonthlyFee * IndividualPeriod - IndividualLimit;
+            }
+            set => Set(ref _iIndividualPereplata, value);
+        }
+
+
+
+        private NavigationService _navigation;
+        
+        public ClientWindowViewModel(NavigationService navigation)
+        {
+            _navigation = navigation;
         }
 
         #region Команды
@@ -158,6 +181,18 @@ namespace BankSystem.ViewModels
 
         });
 
+
+        /// <summary>
+        /// Команда выхода в главное меню
+        /// </summary>
+        public ICommand BackCommand => new DelegateCommand(() =>
+        {
+
+            _navigation.Navigate(new EntryWindow()); //Переходим на страницу регистрации сотрудника
+
+        });
+
+
         /// <summary>
         /// Команда расчета кредита на индивидуальных условиях
         /// </summary>
@@ -166,9 +201,20 @@ namespace BankSystem.ViewModels
 
             Individual = true;
 
-        });
+        }, () => Individual != true);
 
 
         #endregion
+
+        private double CreditOffer(double CreditRate, double IndividualLimit, int IndividualPeriod)
+        { 
+        
+            _individualMonthlyFee = (((CreditRate/1200) * Math.Pow((1 + (CreditRate / 1200)), IndividualPeriod)) / ((Math.Pow((1 + (CreditRate / 1200)), IndividualPeriod)) - 1)) * IndividualLimit;
+
+
+            return _individualMonthlyFee;
+
+        }
+
     }
 }
