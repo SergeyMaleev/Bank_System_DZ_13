@@ -1,4 +1,6 @@
 ﻿using BankSystem.Models;
+using BankSystem.Models.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +13,15 @@ namespace BankSystem.Interface
     /// <summary>
     /// Интерфейс предлагаемого кредитного продукта
     /// </summary>
+    [JsonConverter(typeof(BaseConverterICredit))]
     public interface ICredit
     {
+        /// <summary>
+        /// Статус клиента
+        /// </summary>
+        string Status { get; }
+        
+             
         /// <summary>
         /// Максимальный лимит по кредиту
         /// </summary>
@@ -34,6 +43,11 @@ namespace BankSystem.Interface
         /// Базовая процентная ставка по кредиту
         /// </summary>
         double CreditRate { get; set; }
+
+        /// <summary>
+        /// тип для дессирилизации наследников json
+        /// </summary>
+        int ObjType { get; set; }
 
 
         void CreditOffer(Client client); //Лучшее кредитное предложение для клиента

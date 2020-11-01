@@ -28,6 +28,8 @@ namespace BankSystem
 
             services.AddTransient<ClientWindowViewModel>(); // Обнавляется при каждом обращении
 
+            services.AddSingleton<CreditRegistrationLuckWindowViewModel>();
+
             services.AddSingleton<NavigationService>();
 
             _provider = services.BuildServiceProvider();

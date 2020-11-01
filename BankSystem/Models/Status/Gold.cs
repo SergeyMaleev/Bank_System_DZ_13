@@ -7,14 +7,21 @@ using System.Threading.Tasks;
 
 namespace BankSystem.Models.Status
 {
+    /// <summary>
+    /// класс определяющий условия кредита при статусе Gold
+    /// </summary>
     class Gold : ICredit
     {
 
+
+       
         public double MaxLimit { get; set; }
         public double MonthlyFee { get; set; }
         public int Period { get; set; }
         public double CreditRate { get; set; }
+        public string Status { get; } = "Gold";
 
+        public int ObjType { get; set; } = 2;
 
         /// <summary>
         /// Метод вычисляющий кредитное предложение для клиента статуса Gold
@@ -24,7 +31,7 @@ namespace BankSystem.Models.Status
         {
             if (client is Legal) //если клиент юр.лицо
             {
-                CreditRate = (16.0 / 12) * 0.01; //Месячная процентная ставка 
+                CreditRate = 16.0; //процентная ставка 
 
                 MaxLimit = client.Profit * 25;
 
@@ -32,14 +39,14 @@ namespace BankSystem.Models.Status
             }
             else //Клиент физ.лицо
             {
-                CreditRate = (14.0 / 12) * 0.01; //Месячная процентная ставка
+                CreditRate = 14.0; //процентная ставка
 
                 MaxLimit = client.Profit * 13;
 
                 Period = ((63 - client.Age) > 8 ? 8 : (63 - client.Age)) * 12; //Период до 8 лет, или до 63 лет
             }
 
-            MonthlyFee = ((CreditRate * Math.Pow((1 + CreditRate), Period)) / ((Math.Pow((1 + CreditRate), Period)) - 1)) * MaxLimit; // Формула расчета аннуитетного платежа
+            MonthlyFee = (((CreditRate / 1200) * Math.Pow((1 + (CreditRate / 1200)), Period)) / ((Math.Pow((1 + (CreditRate / 1200)), Period)) - 1)) * MaxLimit; // Формула расчета аннуитетного платежа
 
 
         }

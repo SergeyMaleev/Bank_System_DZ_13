@@ -16,8 +16,7 @@ namespace BankSystem.ViewModels
     public class AdminBankWindowViewModel : ViewModelsBase
     {
 
-        Legal Legal { get; set; }
-
+        
         public AdminBankWindowViewModel()
         {
 

@@ -25,7 +25,7 @@ namespace BankSystem.Models
         public Physical( string FirstName, string LastName, int Age, double Profit, string Telephone)
             : base(FirstName, LastName, Age, Profit, Telephone)
         {
-            
+            ObjType = 2;
         }
 
         /// <summary>

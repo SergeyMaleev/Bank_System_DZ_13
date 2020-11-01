@@ -40,6 +40,7 @@ namespace BankSystem.Models
         /// </summary>
         public Legal()
         {
+            ObjType = 1;
             this.NameOrganization = $"Организация {Nomer}";
             NomerUp();
         }

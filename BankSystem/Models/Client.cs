@@ -1,6 +1,9 @@
 ﻿using BankSystem.Interface;
+using BankSystem.Models.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +13,20 @@ namespace BankSystem.Models
     /// <summary>
     /// Родительский класс клиентов
     /// </summary>
+    [JsonConverter(typeof(BaseConverterClient))]
     public abstract class Client 
     {
-        public ICredit Credit { get; set; }
+
+        /// <summary>
+        /// Предлагаемый кредит на условиях в зависимости от статуса клиента 
+        /// </summary>
+        public ICredit Credit { get; set; } //(в дальнейшем можно продумать условия смены при выполнении определенных условий)
+
+        /// <summary>
+        /// коллекция для хранения имеющихся кредитов
+        /// </summary>
+        public ObservableCollection<ExistingLoan> ExistingLoan { get; set; } = new ObservableCollection<ExistingLoan>();
+
 
         /// <summary>
         /// Дата регистрации клиента
@@ -49,6 +63,11 @@ namespace BankSystem.Models
         /// Контактный телефон
         /// </summary>
         public string Telephone { get; set; }
+
+        /// <summary>
+        /// Тип наследника для дессирилизации json
+        /// </summary>
+        public int ObjType { get; set; }
 
 
 

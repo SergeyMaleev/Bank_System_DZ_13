@@ -59,6 +59,9 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.9.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.9\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyChanged, Version=3.2.10.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.3.2.10\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
@@ -91,6 +94,8 @@
     <Compile Include="Dependency.cs" />
     <Compile Include="Interface\ICredit.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ExistingLoan.cs" />
+    <Compile Include="Models\Json\JsonConverter.cs" />
     <Compile Include="Models\Legal.cs" />
     <Compile Include="Models\Physical.cs" />
     <Compile Include="Models\StaffRandomGeneration.cs" />
@@ -100,6 +105,7 @@
     <Compile Include="NavigationService.cs" />
     <Compile Include="ViewModelsLocator.cs" />
     <Compile Include="ViewModels\AdminBankWindowViewModel.cs" />
+    <Compile Include="ViewModels\CreditRegistrationLuckWindowViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelsBase.cs" />
     <Compile Include="ViewModels\ClientWindowViewModel.cs" />
     <Compile Include="ViewModels\EntryWindowViewModel.cs" />
@@ -111,6 +117,9 @@
     <Compile Include="View\Client\ClientWindow.xaml.cs">
       <DependentUpon>ClientWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Client\CreditRegistrationLuckWindow.xaml.cs">
+      <DependentUpon>CreditRegistrationLuckWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\StaffLoginWindow.xaml.cs">
       <DependentUpon>StaffLoginWindow.xaml</DependentUpon>
     </Compile>
@@ -119,6 +128,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Client\ClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Client\CreditRegistrationLuckWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

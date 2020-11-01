@@ -22,5 +22,7 @@ namespace BankSystem
 
         public ClientWindowViewModel ClientWindowViewModel => Dependency.Resolve<ClientWindowViewModel>();
 
+        public CreditRegistrationLuckWindowViewModel CreditRegistrationLuckWindowViewModel => Dependency.Resolve<CreditRegistrationLuckWindowViewModel>();
+
     } 
 }

@@ -135,7 +135,10 @@
             Margin="26,150,20,123"
             HorizontalAlignment="Center"
             Visibility="{Binding Result, Converter={StaticResource bvc}}">
-
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Статус клиента: " FontSize="16"/>
+                <TextBlock Text="{Binding StatusClient}" FontSize="16" Foreground="Gold"/>
+            </StackPanel>
             <TextBlock
                 FontSize="22"
                 FontStyle="Italic"
@@ -155,7 +158,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Ежемесячный плятеж (рублей): " />
-                <TextBlock Text="{Binding MonthlyFee}" />
+                <TextBlock Text="{Binding MonthlyFee, StringFormat={}{0:F}}" />
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button
@@ -168,7 +171,8 @@
                     Margin="5"
                     Background="Green"
                     Content="Взять кредит"
-                    Foreground="White" />
+                    Foreground="White" 
+                    Command="{Binding ICreditCreditCommand}"/>
             </StackPanel>
         </StackPanel>
         <StackPanel
@@ -244,7 +248,8 @@
                 Margin="200,20,200,0"
                 Background="BlueViolet"
                 Content="Взять кредит на индивидуальных условиях"
-                Foreground="White" />
+                Foreground="White" 
+                Command="{Binding ICreditPersonalCommand}"/>
         </StackPanel>
 
 

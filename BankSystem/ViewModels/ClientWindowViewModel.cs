@@ -4,12 +4,15 @@ using BankSystem.View;
 using BankSystem.View.Client;
 using BankSystem.ViewModels.Base;
 using DevExpress.Mvvm;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -17,9 +20,12 @@ namespace BankSystem.ViewModels
 {
     public class ClientWindowViewModel : ViewModelsBase
     {
-        public Client Client { get; set; } //Создаем класс клиента
 
+        public ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>(); // коллекция клиентов имеющих кредит
+             
+        public Client Client { get; set; } //Создаем класс потенциального клиента
 
+        #region Поля вводимые пользователем
         /// <summary>
         /// Индекс выбора пользователя в combobox [0] - физ.лицо, [1] - юр.лицо
         /// </summary>
@@ -35,10 +41,30 @@ namespace BankSystem.ViewModels
         /// </summary>
         public string LastName { get; set; }
 
+        private int _age;
+        
         /// <summary>
         /// Возраст клиента (существования юр.лица)
         /// </summary>
-        public int Age { get; set; }
+        public int Age
+        {
+            get => _age;
+
+
+            set
+            {
+                if(value > 18) 
+                    Set(ref _age, value);
+                else
+                {
+                    MessageBox.Show("Возраст заемщика не может быть меньше 18 лет");
+                    
+                }
+               
+            }
+            
+            }
+
 
         /// <summary>
         /// Доход
@@ -47,7 +73,7 @@ namespace BankSystem.ViewModels
 
 
         /// <summary>
-        /// Кредитный рейтинг
+        /// Кредитный рейтинг 
         /// </summary>
         private int CreditRating { get; set; }
 
@@ -65,6 +91,12 @@ namespace BankSystem.ViewModels
         }
 
         public string NameOrganization { get; set; }
+        #endregion
+
+        /// <summary>
+        /// статус клиента
+        /// </summary>
+        public string StatusClient { get; set; }
 
         /// <summary>
         /// Запрещает ввод в поле NameOrganization при выборе физ.лица
@@ -91,10 +123,10 @@ namespace BankSystem.ViewModels
 
 
         //Для отображеия кредитного предложения
-        public double MaxLimit { get; set; }
-        public double MonthlyFee { get; set; }
-        public int Period { get; set; }
-        public double CreditRate { get; set; }
+        public double MaxLimit { get; set; }   //максимальный лимит кредита
+        public double MonthlyFee { get; set; } //ежемесячный платеж
+        public int Period { get; set; }        //Период выплаты кредита
+        public double CreditRate { get; set; } //Ставка по кредиту 
 
 
 
@@ -132,11 +164,35 @@ namespace BankSystem.ViewModels
         public ClientWindowViewModel(NavigationService navigation)
         {
             _navigation = navigation;
+
+
+            var FileExists = File.Exists("ClientList.json");
+            if (FileExists)
+            {
+
+                using (StreamReader reader = File.OpenText("ClientList.json"))//Если есть открываем
+                {
+
+                    var fileText = reader.ReadToEnd();//Прочитываем до конца             
+                    Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(fileText);//Возвращаем в исходном виде
+
+                    
+
+                }
+
+            }
+
+                
+
+
+
+
+
         }
 
         #region Команды
         /// <summary>
-        /// Команда сохранения клиента
+        /// Команда создания клиента
         /// </summary>
         public ICommand ResultCommand => new DelegateCommand(() =>
         {
@@ -147,14 +203,15 @@ namespace BankSystem.ViewModels
                 Client.Credit.CreditOffer(Client);
                
             }
-            else
+            else //Юр.лицо, при создании всегда статус standart
             {
                 Client = new Legal(NameOrganization, FirstName, LastName, Age, Profit, Telephone);
                 Client.Credit = new Standart();
                 Client.Credit.CreditOffer(Client);
             }
 
-            CreditRate = Client.Credit.CreditRate * 12 * 100;
+            //Сохраняем для отображения в консоли кредитного предложения (напрямую не биндится)
+            CreditRate = Client.Credit.CreditRate;
 
             MaxLimit = Client.Credit.MaxLimit;
 
@@ -162,7 +219,9 @@ namespace BankSystem.ViewModels
 
             MonthlyFee = Client.Credit.MonthlyFee;
 
-            Result = true;
+            StatusClient = Client.Credit.Status;
+
+            Result = true; //Открываем блок персонального предложения
 
         }, () => //Условия при которых кнопка отработает
         {
@@ -201,11 +260,68 @@ namespace BankSystem.ViewModels
 
             Individual = true;
 
-        }, () => Individual != true);
+        }, () => Individual != true); //как только открыли выбор индивидуальных условий кредита команда недоступна
+
+
+        /// <summary>
+        /// Команда выдачи кредита при согласии с предложением и добавления в список клиентов банка
+        /// </summary>
+        public ICommand ICreditCreditCommand => new DelegateCommand(() =>
+        {
+
+            Client.ExistingLoan.Add(new ExistingLoan(MaxLimit, Period, MonthlyFee)); //выдаем кредит клиенту 
+
+            Clients.Add(Client); //Добавляем с список клиентов
+
+            
+
+            using (StreamWriter writer = File.CreateText("ClientList.json"))
+            {
+                string f_text = JsonConvert.SerializeObject(Clients);
+                writer.Write(f_text);
+
+            }
+            
+            _navigation.Navigate(new CreditRegistrationLuckWindow()); //Переходим на страницу информации об успешной выдачи кредита
+
+        });
+
+        /// <summary>
+        /// Команда выдачи кредита на индивидуальных условиях и добавления в список клиентов банка
+        /// </summary>
+        public ICommand ICreditPersonalCommand => new DelegateCommand(() =>
+        {
+
+            Client.ExistingLoan.Add(new ExistingLoan(IndividualLimit, IndividualPeriod, IndividualMonthlyFee)); //выдаем кредит клиенту 
+
+            Clients.Add(Client); //Добавляем с список клиентов
+
+            
+            using (StreamWriter writer = File.CreateText("ClientList.json"))
+            {
+                string f_text = JsonConvert.SerializeObject(Clients);
+                writer.Write(f_text);
+
+            }
+
+
+            _navigation.Navigate(new CreditRegistrationLuckWindow()); //Переходим на страницу информации об успешной выдачи кредита
+
+
+
+        });
 
 
         #endregion
 
+
+        /// <summary>
+        /// Метод вычисляющий сумму ежемесячного платежа 
+        /// </summary>
+        /// <param name="CreditRate"> ставка процентов готовых</param>
+        /// <param name="IndividualLimit"></param>
+        /// <param name="IndividualPeriod"></param>
+        /// <returns></returns>
         private double CreditOffer(double CreditRate, double IndividualLimit, int IndividualPeriod)
         { 
         
