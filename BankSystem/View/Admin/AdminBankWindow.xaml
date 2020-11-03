@@ -73,7 +73,7 @@
                 <ListBox Height="500" ItemsSource="{Binding SelectedClient.ExistingLoan}" Margin="10">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock >
+                            <TextBlock>
                                 <StackPanel Margin="3">
                                     <TextBlock
                                         FontSize="13"

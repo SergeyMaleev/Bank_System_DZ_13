@@ -191,6 +191,16 @@ namespace BankSystem.Models
                 client.Credit.CreditOffer(client);
                 client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
                 client.PersonalAccount += client.Credit.MaxLimit;
+
+                //Возможно получить 2 кредит, но с условием что ежемесячный платеж минусуется от зарплаты
+                if (random.Next(0, 2) == 1)
+                {
+                    client.Profit = client.Profit - client.Credit.MonthlyFee;
+                    client.Credit.CreditOffer(client);
+                    client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
+                    client.PersonalAccount += client.Credit.MaxLimit;
+                }    
+
             }
             else
             {
@@ -198,13 +208,32 @@ namespace BankSystem.Models
                 client.Credit.CreditOffer(client);
                 client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
                 client.PersonalAccount += client.Credit.MaxLimit;
+
+                //Возможно получить 2 кредит, но с условием что ежемесячный платеж минусуется от зарплаты
+                if (random.Next(0, 2) == 1)
+                {
+                    client.Profit = client.Profit - client.Credit.MonthlyFee;
+                    client.Credit.CreditOffer(client);
+                    client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
+                    client.PersonalAccount += client.Credit.MaxLimit;
+
+                    //Возможно получить 3 кредит, но с условием что ежемесячный платеж минусуется от зарплаты
+                    if (random.Next(0, 2) == 1)
+                    {
+                        client.Profit = client.Profit - client.Credit.MonthlyFee;
+                        client.Credit.CreditOffer(client);
+                        client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
+                        client.PersonalAccount += client.Credit.MaxLimit;
+
+                    }
+                }
+
             }
 
             return client;
 
         }
 
-
-
+        
     }
 }
