@@ -26,12 +26,10 @@ namespace BankSystem.Models
             : base(FirstName, LastName, Age, Profit, Telephone)
         {
             ObjType = 2;
+            PersonalAccount = ClientRandomGeneration.random.Next(25000, 180000);
         }
 
-        /// <summary>
-        /// Конструктор для автозаполнения
-        /// </summary>
-        public Physical() { }
+        
 
 
     }

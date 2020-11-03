@@ -64,6 +64,14 @@ namespace BankSystem.Models
         /// </summary>
         public string Telephone { get; set; }
 
+
+        /// <summary>
+        /// Лицевой счет
+        /// </summary>
+        public double PersonalAccount { get; set; }
+
+
+
         /// <summary>
         /// Тип наследника для дессирилизации json
         /// </summary>
@@ -95,25 +103,8 @@ namespace BankSystem.Models
 
         }
 
-        /// <summary>
-        /// Конструктор клиента для автоматического заполнения
-        /// </summary>
-        public Client()
-        {
-            var firstNamelastName = StaffRandomGeneration.GetRandName();
+        
 
-            this.DateTime = DateTime.Now;
-
-            this.FirstName = firstNamelastName[0];
-
-            this.LastName = firstNamelastName[1];
-
-            this.Age = StaffRandomGeneration.random.Next(18,61);
-
-            this.Profit = StaffRandomGeneration.random.Next(25000, 180000);
-
-            this.Telephone = firstNamelastName[2];
-
-        }
+        
     }
 }

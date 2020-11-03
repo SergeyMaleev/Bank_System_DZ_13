@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BankSystem.Models.Status;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +11,11 @@ namespace BankSystem.Models
     /// <summary>
     /// Статический класс генерации данных о персонале
     /// </summary>
-    public static class StaffRandomGeneration
+    public static class ClientRandomGeneration
     {
         public static Random random = new Random();
+
+        private static int _numberOrganization;
 
 
         /// <summary>
@@ -115,6 +119,92 @@ namespace BankSystem.Models
             }
 
         }
+
+        /// <summary>
+        /// Метод автоматически заполняющий коллекцию клиентов
+        /// </summary>
+        /// <param name="Clients"></param>
+        /// <returns></returns>
+        public static Client AutoClient()
+        {
+           Client client;
+            ++_numberOrganization;
+
+            var ClientInfo = GetRandName();
+
+            
+
+            int index = random.Next(0, 2);
+
+            switch (index)
+            {
+                case 0:
+                    client = new Legal(
+                        $"Организация №{_numberOrganization}",
+                        ClientInfo[0],
+                        ClientInfo[1],
+                        random.Next(19, 55),
+                        random.Next(180000, 2000000),
+                        ClientInfo[2]
+                        );
+               return StatusClient(client);
+                    
+                    
+                case 1:
+                    client = new Physical(                       
+                        ClientInfo[0],
+                        ClientInfo[1],
+                        random.Next(19, 55),
+                        random.Next(18000, 200000),
+                        ClientInfo[2]
+                        );
+                    return StatusClient(client);
+
+                default: 
+                    return null;
+
+            }
+        
+        }
+
+        /// <summary>
+        /// Вспомогательный метод выдачи кредита с учетом статуса клиента
+        /// </summary>
+        /// <param name="client">Клиент</param>
+        /// <returns></returns>
+        private static Client StatusClient(Client client)
+        {
+            var index = random.Next(0, 21);
+
+            if (index <= 10)
+            {
+                client.Credit = new Standart();
+                client.Credit.CreditOffer(client);
+                client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
+                client.PersonalAccount += client.Credit.MaxLimit;
+
+            }
+            else if (index > 10 && index < 17)
+            {
+
+                client.Credit = new Gold();
+                client.Credit.CreditOffer(client);
+                client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
+                client.PersonalAccount += client.Credit.MaxLimit;
+            }
+            else
+            {
+                client.Credit = new VIP();
+                client.Credit.CreditOffer(client);
+                client.ExistingLoan.Add(new ExistingLoan(client.Credit.MaxLimit, client.Credit.Period, client.Credit.MonthlyFee));
+                client.PersonalAccount += client.Credit.MaxLimit;
+            }
+
+            return client;
+
+        }
+
+
 
     }
 }

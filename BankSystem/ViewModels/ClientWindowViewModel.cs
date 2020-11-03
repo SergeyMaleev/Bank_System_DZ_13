@@ -1,4 +1,5 @@
 ﻿using BankSystem.Models;
+using BankSystem.Models.Json;
 using BankSystem.Models.Status;
 using BankSystem.View;
 using BankSystem.View.Client;
@@ -21,8 +22,13 @@ namespace BankSystem.ViewModels
     public class ClientWindowViewModel : ViewModelsBase
     {
 
-        public ObservableCollection<Client> Clients { get; set; } = new ObservableCollection<Client>(); // коллекция клиентов имеющих кредит
-             
+        public ObservableCollection<Client> Clients { get; set; }  // коллекция клиентов имеющих кредит
+
+        private FileJson _fileJson;
+
+        private readonly string PATH = "ClientList.json"; //путь к файлу с коллекцией клиентов
+
+
         public Client Client { get; set; } //Создаем класс потенциального клиента
 
         #region Поля вводимые пользователем
@@ -53,7 +59,7 @@ namespace BankSystem.ViewModels
 
             set
             {
-                if(value > 18) 
+                if(value >= 18) 
                     Set(ref _age, value);
                 else
                 {
@@ -165,29 +171,12 @@ namespace BankSystem.ViewModels
         {
             _navigation = navigation;
 
+            _fileJson = new FileJson(PATH);
 
-            var FileExists = File.Exists("ClientList.json");
-            if (FileExists)
-            {
-
-                using (StreamReader reader = File.OpenText("ClientList.json"))//Если есть открываем
-                {
-
-                    var fileText = reader.ReadToEnd();//Прочитываем до конца             
-                    Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(fileText);//Возвращаем в исходном виде
-
-                    
-
-                }
-
-            }
-
-                
+             Clients = _fileJson.LoadData();
 
 
-
-
-
+           
         }
 
         #region Команды
@@ -273,14 +262,9 @@ namespace BankSystem.ViewModels
 
             Clients.Add(Client); //Добавляем с список клиентов
 
-            
+            Client.PersonalAccount += MaxLimit; //Добавляем с лицевой счет сумму кредита
 
-            using (StreamWriter writer = File.CreateText("ClientList.json"))
-            {
-                string f_text = JsonConvert.SerializeObject(Clients);
-                writer.Write(f_text);
-
-            }
+            _fileJson.SaveData(Clients);
             
             _navigation.Navigate(new CreditRegistrationLuckWindow()); //Переходим на страницу информации об успешной выдачи кредита
 
@@ -292,17 +276,14 @@ namespace BankSystem.ViewModels
         public ICommand ICreditPersonalCommand => new DelegateCommand(() =>
         {
 
-            Client.ExistingLoan.Add(new ExistingLoan(IndividualLimit, IndividualPeriod, IndividualMonthlyFee)); //выдаем кредит клиенту 
+            Client.ExistingLoan.Add(new ExistingLoan(IndividualLimit, IndividualPeriod, IndividualMonthlyFee)); //выдаем кредит клиенту
+
+            Client.PersonalAccount += IndividualLimit; //Добавляем с лицевой счет сумму кредита
 
             Clients.Add(Client); //Добавляем с список клиентов
 
-            
-            using (StreamWriter writer = File.CreateText("ClientList.json"))
-            {
-                string f_text = JsonConvert.SerializeObject(Clients);
-                writer.Write(f_text);
 
-            }
+            _fileJson.SaveData(Clients);
 
 
             _navigation.Navigate(new CreditRegistrationLuckWindow()); //Переходим на страницу информации об успешной выдачи кредита

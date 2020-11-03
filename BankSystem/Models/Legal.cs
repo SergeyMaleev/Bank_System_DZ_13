@@ -13,8 +13,7 @@ namespace BankSystem.Models
     class Legal : Client
     {
         
-        static int Nomer { get; set; }
-
+        
         public string NameOrganization { get; set;}
 
 
@@ -32,28 +31,11 @@ namespace BankSystem.Models
             : base(FirstName, LastName, Age, Profit, Telephone)
         {
             this.NameOrganization = NameOrganization;
-        }
-
-
-        /// <summary>
-        /// Конструктор для автозаполнения
-        /// </summary>
-        public Legal()
-        {
             ObjType = 1;
-            this.NameOrganization = $"Организация {Nomer}";
-            NomerUp();
+            PersonalAccount = ClientRandomGeneration.random.Next(250000, 1800000);
         }
 
-
-
-        /// <summary>
-        /// Метод счетчик организаций созданных вручную
-        /// </summary>
-        static void NomerUp()
-        {
-            ++Nomer;
-        }
+     
 
     }
 }

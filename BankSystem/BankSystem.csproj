@@ -95,10 +95,11 @@
     <Compile Include="Interface\ICredit.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\ExistingLoan.cs" />
+    <Compile Include="Models\Json\FileJson.cs" />
     <Compile Include="Models\Json\JsonConverter.cs" />
     <Compile Include="Models\Legal.cs" />
     <Compile Include="Models\Physical.cs" />
-    <Compile Include="Models\StaffRandomGeneration.cs" />
+    <Compile Include="Models\ClientRandomGeneration.cs" />
     <Compile Include="Models\Status\Gold.cs" />
     <Compile Include="Models\Status\Standart.cs" />
     <Compile Include="Models\Status\VIP.cs" />

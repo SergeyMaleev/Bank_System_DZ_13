@@ -14,23 +14,22 @@ namespace BankSystem.Models
         /// <summary>
         /// Сумма кредита
         /// </summary>
-        public double LoanAmount { get;  } 
+        public double LoanAmount { get; set; } 
 
         /// <summary>
         /// Период кредита
         /// </summary>
-        public int LoanPeriod { get;  }  
+        public int LoanPeriod { get; set; }
 
         /// <summary>
         /// Платеж по кредиту (ежемесячный)
         /// </summary>
-        public double CreditPayment { get;  }
-
+        public double CreditPayment { get; set; }
 
         /// <summary>
         /// Дата выдачи кредита
         /// </summary>
-        public DateTime DateTime { get; }
+        public DateTime DateTime { get; set; }
 
         /// <summary>
         /// Конструктор для заполнения информации по кредиту
