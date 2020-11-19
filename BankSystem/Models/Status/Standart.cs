@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace BankSystem.Models.Status
 {
     /// <summary>
-    /// класс определяющий условия кредита при статусе Standart
+    /// класс определяющий условия при статусе Standart
     /// </summary>
-    class Standart : ICredit
+    class Standart : ICredit, IСontribution
     {
 
         public double MaxLimit { get; set; }
@@ -20,6 +20,12 @@ namespace BankSystem.Models.Status
         public string Status { get; } = "Standart";
 
         public int ObjType { get; set; } = 1;
+
+
+        //Поля вклада        
+        public int TimeOfDeposit { get; set; }
+
+        public double RateOfContribution { get; set; }
 
         /// <summary>
         /// Метод вычисляющий кредитное предложение для клиента статуса standart
@@ -47,6 +53,21 @@ namespace BankSystem.Models.Status
             MonthlyFee = (((CreditRate / 1200) * Math.Pow((1 + (CreditRate / 1200)), Period)) / ((Math.Pow((1 + (CreditRate / 1200)), Period)) - 1)) * MaxLimit; // Формула расчета аннуитетного платежа
 
 
+        }
+
+        public void СontributionOffer(Client client)
+        {
+            if (client is Legal) //если клиент юр.лицо
+            {
+                RateOfContribution = 8.0; //ставка по вкладу
+                TimeOfDeposit = 18;
+
+            }
+            else //Клиент физ.лицо
+            {
+                RateOfContribution = 7.0; //ставка по вкладу
+                TimeOfDeposit = 24;
+            }
         }
     }
 }

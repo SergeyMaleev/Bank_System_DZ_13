@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace BankSystem.Models.Status
 {
     /// <summary>
-    /// класс определяющий условия кредита при статусе VIP
+    /// класс определяющий условия при статусе VIP
     /// </summary>
-    class VIP : ICredit
+    class VIP : ICredit, IСontribution
     {
 
         public double MaxLimit { get; set; }
@@ -21,6 +21,11 @@ namespace BankSystem.Models.Status
 
         public int ObjType { get; set; } = 3;
 
+
+        //Поля вклада        
+        public int TimeOfDeposit { get; set; }
+        public double RateOfContribution { get; set; }
+
         /// <summary>
         /// Метод вычисляющий кредитное предложение для клиента статуса standart
         /// </summary>
@@ -29,7 +34,7 @@ namespace BankSystem.Models.Status
         {
             if (client is Legal) //если клиент юр.лицо
             {
-                CreditRate = 14.0 ; //процентная ставка 
+                CreditRate = 14.0; //процентная ставка 
 
                 MaxLimit = client.Profit * 30;
 
@@ -47,6 +52,21 @@ namespace BankSystem.Models.Status
             MonthlyFee = (((CreditRate / 1200) * Math.Pow((1 + (CreditRate / 1200)), Period)) / ((Math.Pow((1 + (CreditRate / 1200)), Period)) - 1)) * MaxLimit; // Формула расчета аннуитетного платежа
 
 
+        }
+
+        public void СontributionOffer(Client client)
+        {
+            if (client is Legal) //если клиент юр.лицо
+            {
+                RateOfContribution = 10.0; //ставка по вкладу
+                TimeOfDeposit = 6;
+
+            }
+            else //Клиент физ.лицо
+            {
+                RateOfContribution = 9.0; //ставка по вкладу
+                TimeOfDeposit = 12;
+            }
         }
     }
 }

@@ -93,7 +93,9 @@
     </ApplicationDefinition>
     <Compile Include="Dependency.cs" />
     <Compile Include="Interface\ICredit.cs" />
+    <Compile Include="Interface\IСontribution.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ExistingContribution.cs" />
     <Compile Include="Models\ExistingLoan.cs" />
     <Compile Include="Models\Json\FileJson.cs" />
     <Compile Include="Models\Json\JsonConverter.cs" />

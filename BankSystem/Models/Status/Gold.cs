@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace BankSystem.Models.Status
 {
     /// <summary>
-    /// класс определяющий условия кредита при статусе Gold
+    /// класс определяющий условия при статусе Gold
     /// </summary>
-    class Gold : ICredit
+    class Gold : ICredit, IСontribution
     {
 
 
-       
+        //Поля кредита
         public double MaxLimit { get; set; }
         public double MonthlyFee { get; set; }
         public int Period { get; set; }
@@ -22,6 +22,11 @@ namespace BankSystem.Models.Status
         public string Status { get; } = "Gold";
 
         public int ObjType { get; set; } = 2;
+
+        //Поля вклада        
+        public int TimeOfDeposit { get; set; }
+
+        public double RateOfContribution { get; set; }
 
         /// <summary>
         /// Метод вычисляющий кредитное предложение для клиента статуса Gold
@@ -49,6 +54,21 @@ namespace BankSystem.Models.Status
             MonthlyFee = (((CreditRate / 1200) * Math.Pow((1 + (CreditRate / 1200)), Period)) / ((Math.Pow((1 + (CreditRate / 1200)), Period)) - 1)) * MaxLimit; // Формула расчета аннуитетного платежа
 
 
+        }
+
+        public void СontributionOffer(Client client)
+        {
+            if (client is Legal) //если клиент юр.лицо
+            {
+                RateOfContribution = 9.0; //ставка по вкладу
+                TimeOfDeposit = 12;
+
+            }
+            else //Клиент физ.лицо
+            {
+                RateOfContribution = 8.0; //ставка по вкладу
+                TimeOfDeposit = 18;
+            }
         }
     }
 }

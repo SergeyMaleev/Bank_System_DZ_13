@@ -31,7 +31,7 @@ namespace BankSystem.Models
         /// <summary>
         /// Дата регистрации клиента
         /// </summary>
-        public DateTime DateTime { get; } 
+        public DateTime DateTime { get; } = new DateTime();
 
         /// <summary>
         /// Имя клиента (представителя юр.лица)

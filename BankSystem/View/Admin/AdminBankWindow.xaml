@@ -39,17 +39,17 @@
                         Width="120"
                         Binding="{Binding Path=NameOrganization}"
                         Header="Организация"
-                        IsReadOnly="False" />
+                        IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="80"
                         Binding="{Binding Path=FirstName}"
                         Header="Имя"
-                        IsReadOnly="False" />
+                        IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="100"
                         Binding="{Binding Path=LastName}"
                         Header="Фамилия"
-                        IsReadOnly="False" />
+                        IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="60"
                         Binding="{Binding Path=Age}"
@@ -59,7 +59,7 @@
                         Width="100"
                         Binding="{Binding Path=PersonalAccount}"
                         Header="Лицевой счет"
-                        IsReadOnly="False" />
+                        IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
                         Binding="{Binding Path=ExistingLoan.Count}"
@@ -70,7 +70,10 @@
         </GroupBox>
         <GroupBox Header="Информация о продуктах">
             <StackPanel>
-                <ListBox Height="500" ItemsSource="{Binding SelectedClient.ExistingLoan}" Margin="10">
+                <ListBox
+                    Height="500"
+                    Margin="10"
+                    ItemsSource="{Binding SelectedClient.ExistingLoan}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
@@ -81,24 +84,36 @@
                                         Foreground="Green"
                                         Text="Потребительский кредит" />
                                     <TextBlock>
-                                        <Run Text="выдано: " FontWeight="Bold" FontSize="10"/>
+                                        <Run
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Text="выдано: " />
                                         <Run FontSize="10" Text="{Binding DateTime, StringFormat=dd.MM.yyyy}" />
-                                        
+
                                     </TextBlock>
                                     <TextBlock>
-                                        <Run Text="сумма: " FontWeight="Bold" FontSize="10"/>
+                                        <Run
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Text="сумма: " />
                                         <Run FontSize="10" Text="{Binding LoanAmount}" />
                                         <Run FontSize="10" Text="рублей" />
                                     </TextBlock>
-                                    
+
                                     <TextBlock>
-                                        <Run Text="На срок: " FontWeight="Bold" FontSize="10"/>
+                                        <Run
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Text="На срок: " />
                                         <Run FontSize="10" Text="{Binding LoanPeriod}" />
                                         <Run FontSize="10" Text="месяцев" />
                                     </TextBlock>
-                                   
+
                                     <TextBlock>
-                                        <Run Text="Платеж: " FontWeight="Bold" FontSize="10"/>
+                                        <Run
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Text="Платеж: " />
                                         <Run FontSize="10" Text="{Binding CreditPayment}" />
                                         <Run FontSize="10" Text="в месяц" />
                                     </TextBlock>

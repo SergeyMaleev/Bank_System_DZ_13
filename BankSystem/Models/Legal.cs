@@ -13,7 +13,9 @@ namespace BankSystem.Models
     class Legal : Client
     {
         
-        
+        /// <summary>
+        /// Наименование организации
+        /// </summary>
         public string NameOrganization { get; set;}
 
 
